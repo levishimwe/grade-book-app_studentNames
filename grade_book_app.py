@@ -11,6 +11,7 @@ class Student:
 
     def register_course(self, course):
         self.courses[course.name] = None  # Initially no grade
+        
 
     def add_grade(self, course_name, grade):
         if course_name in self.courses:
@@ -43,9 +44,10 @@ class GradeBook:
 
     def add_student(self, student):
         self.students.append(student)
-
+        self.save_data()
     def add_course(self, course):
         self.courses.append(course)
+        self.save_data()
 
     def get_student_by_email(self, email):
         return next((s for s in self.students if s.email == email), None)
@@ -58,6 +60,7 @@ class GradeBook:
         course = self.get_course_by_name(course_name)
         if student and course:
             student.register_course(course)
+            self.save_data()
             return True
         return False
 
@@ -65,6 +68,7 @@ class GradeBook:
         student = self.get_student_by_email(student_email)
         if student:
             student.add_grade(course_name, grade)
+            self.save_data()
             return True
         return False
 
@@ -88,6 +92,8 @@ class GradeBook:
             print("No saved data found.")
     def list_all_courses(self):
         return self.courses
+    def list_all_students(self):
+        return self.students
 
 
 # User Interface
@@ -96,7 +102,7 @@ def main():
     grade_book.load_data()
 
     while True:
-        print("\nGrade Book Application")
+        print("\n Welcome to Grade Book Application")
         print("1. Add Student")
         print("2. Add Course")
         print("3. Register Student for Course")
@@ -105,8 +111,8 @@ def main():
         print("6. Rank Students by GPA")
         print("7. Search Students by Grade")
         print("8. List all courses")
-        print("9. Save Data")
-        print("10. Exit")
+        print("9. Exit")
+        print("10.Thank you bye")
 
         choice = input("Enter your choice: ")
 
@@ -169,13 +175,18 @@ def main():
                  print(f"{student.first_name} {student.last_name} - {student.email}")
 
         elif choice == '8':
-          grade_book.list_all_courses()
+          courses = grade_book.list_all_courses()
+          for course in courses:
+              print(f"{course.name} {course.trimester} {course.credits}")
         
         elif choice == '9':
-         grade_book.save_data()
+            grade_book.list_all_students()
+            
+        
          
 
         elif choice == '10':
+        
          print("Thank you for using the Grade Book Application. Goodbye!")
          break
 
